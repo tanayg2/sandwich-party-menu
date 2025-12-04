@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { BackgroundIcons } from "@/components/background-icons"
 import { NameDialog } from "@/components/name-dialog"
 import { MenuSection } from "@/components/menu-section"
 import { AppetizerItem } from "@/components/appetizer-item"
@@ -47,35 +48,48 @@ export default function Home() {
 
   const entrees = [
     {
-      id: "mortadella",
-      name: "Mortadella Sandwich",
-      description: "Thinly sliced mortadella with traditional accompaniments",
-    },
-    {
       id: "caprese",
       name: "Caprese Sandwich",
-      description: "Fresh mozzarella, tomato, and basil with balsamic reduction",
+      description:
+        "Grilled chicken (optional), mozzarella, pesto, sun-dried tomatoes, basil, etc.",
     },
     {
-      id: "shawarma",
-      name: "Shawarma Wrap",
-      description: "Seasoned meat with tahini sauce and fresh vegetables",
+      id: "tony-mortadella",
+      name: "Tony Bourdain's Mortadella Sandwich",
+      description: "Tony Bourdain style (pan-fried mortadella, provolone)",
+    },
+    {
+      id: "all-antico-vinaio-mortadella",
+      name: "All'antico Vinaio's Mortadella Sandwich",
+      description:
+        "This is the riskiest pick because I have no idea how this is going to turn out but I'm gonna try making All'antico Vinaio's famous mortadella sandwich. Pistachio spread, stracciatella, mortadella or focaccia.",
     },
   ]
 
   return (
-    <main className="min-h-screen bg-background">
-      <NameDialog isOpen={isDialogOpen} onNameSubmit={handleNameSubmit} onDataFetched={handleDataFetched} />
+    <main className="relative min-h-screen overflow-hidden bg-background">
+      <BackgroundIcons />
+      <NameDialog
+        isOpen={isDialogOpen}
+        onNameSubmit={handleNameSubmit}
+        onDataFetched={handleDataFetched}
+      />
 
-      <div className="max-w-2xl mx-auto px-4 py-8 md:py-12">
+      <div className="relative z-10 max-w-2xl mx-auto px-4 py-8 md:py-12">
         {/* Appetizers Section */}
         <MenuSection title="Appetizers">
-          <AppetizerItem name="Cucumber Tea Sandwiches" />
-          <AppetizerItem name="Charcuterie" />
+          <AppetizerItem
+            name="Tea Sandwiches"
+            description="Cucumber, cream cheese, and smoked salmon and maybe some other fun stuff if I have time"
+          />
+          <AppetizerItem name="Charcuterie" description="It's charcuterie" />
         </MenuSection>
 
         {/* Entrees Section */}
-        <MenuSection title="Entrées">
+        <MenuSection
+          title="Entrées"
+          subtext="Pick one so I know roughly how much to make but I'm planning to have extras of each."
+        >
           {entrees.map((entree) => (
             <EntreeItem
               key={entree.id}
@@ -92,7 +106,10 @@ export default function Home() {
 
         {/* Dessert Section */}
         <MenuSection title="Dessert">
-          <DessertItem name="Ice Cream Sandwich" />
+          <DessertItem
+            name="Ice Cream Sandwich"
+            description="It's an ice cream sandwich. Vanilla. Might make the cookies myself or I might buy them who knows."
+          />
         </MenuSection>
 
         {/* Form Section */}

@@ -39,8 +39,8 @@ export function NameDialog({ isOpen, onNameSubmit, onDataFetched }: NameDialogPr
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
       <div className="bg-background rounded-lg shadow-xl p-8 w-full max-w-md mx-4">
-        <h2 className="font-serif text-3xl mb-6 text-center text-foreground">Welcome to the Menu</h2>
-        <p className="text-center text-muted-foreground mb-6">Please enter your name to get started</p>
+        <h2 className="font-serif text-3xl mb-6 text-center text-foreground">I&apos;m excited to see you at the sandwich party!</h2>
+        <p className="text-center text-muted-foreground mb-6">Enter your name so I know who you are</p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"

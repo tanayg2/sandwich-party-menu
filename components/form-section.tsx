@@ -32,14 +32,17 @@ export function FormSection({
     <section className="py-8 md:py-12 border-t-2 border-border">
       <div className="space-y-6">
         <div>
-          <label htmlFor="dietary" className="block font-serif text-xl text-foreground mb-3">
+          <label
+            htmlFor="dietary"
+            className="block font-serif text-xl text-foreground mb-3"
+          >
             Dietary Restrictions
           </label>
           <textarea
             id="dietary"
             value={dietaryRestrictions}
             onChange={(e) => onDietaryRestrictionsChange(e.target.value)}
-            placeholder="Please let us know about any dietary restrictions or allergies..."
+            placeholder="Let me know if you have any dietary restrictions or allergies. If you want gluten-free bread I will get some but I won't be happy"
             className="w-full px-4 py-3 border border-border rounded-lg bg-card text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent resize-none"
             rows={4}
           />
