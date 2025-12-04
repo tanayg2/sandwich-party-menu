@@ -62,7 +62,7 @@ export default function Home() {
       id: "all-antico-vinaio-mortadella",
       name: "All'antico Vinaio's Mortadella Sandwich",
       description:
-        "This is the riskiest pick because I have no idea how this is going to turn out but I'm gonna try making All'antico Vinaio's famous mortadella sandwich. Pistachio spread, stracciatella, mortadella or focaccia.",
+        "This is the riskiest pick because I have no idea how this is going to turn out but I'm gonna try making All'antico Vinaio's famous mortadella sandwich. Pistachio spread, stracciatella, mortadella on focaccia.",
     },
   ]
 
