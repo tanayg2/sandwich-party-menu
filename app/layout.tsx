@@ -4,29 +4,31 @@ import { Playfair_Display, Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 
-const playfairDisplay = Playfair_Display({ subsets: ["latin"], variable: "--font-serif" })
+const playfairDisplay = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-serif",
+})
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
 export const metadata: Metadata = {
-  title: "Party Menu",
-  description: "An elegant party menu experience",
-  generator: "v0.app",
+  title: "Sandwich Party",
+  description: "Place your sandwich orders here",
   icons: {
     icon: [
       {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
+        url: "/web-app-manifest-192x192.png",
+        sizes: "192x192",
       },
       {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
+        url: "/web-app-manifest-512x512.png",
+        sizes: "512x512",
       },
       {
-        url: "/icon.svg",
+        url: "/favicon.svg",
         type: "image/svg+xml",
       },
     ],
-    apple: "/apple-icon.png",
+    apple: "/apple-touch-icon.png",
   },
 }
 
@@ -37,7 +39,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${playfairDisplay.variable} ${inter.variable} font-sans antialiased`}>
+      <body
+        className={`${playfairDisplay.variable} ${inter.variable} font-sans antialiased`}
+      >
         {children}
         <Analytics />
       </body>

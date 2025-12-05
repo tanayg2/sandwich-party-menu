@@ -154,7 +154,7 @@ export default function Home() {
         <MenuSection title="Dessert">
           <DessertItem
             name="Ice Cream Sandwich"
-            description="It's an ice cream sandwich. Vanilla. Might make the cookies myself or I might buy them who knows."
+            description="It's an ice cream sandwich. Vanilla. Might make the cookies myself or I might buy them who knows. I will likely have lactase on deck for the lactose-phobic."
           />
         </MenuSection>
 
