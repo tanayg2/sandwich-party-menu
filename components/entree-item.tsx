@@ -7,7 +7,7 @@ interface EntreeItemProps {
   isSelected: boolean
   onSelect: (id: string) => void
   modifications: string
-  onModificationsChange: (id: string, value: string) => void
+  onModificationsChange: (value: string) => void
 }
 
 export function EntreeItem({
@@ -53,7 +53,7 @@ export function EntreeItem({
           <textarea
             id={`mod-${id}`}
             value={modifications}
-            onChange={(e) => onModificationsChange(id, e.target.value)}
+            onChange={(e) => onModificationsChange(e.target.value)}
             placeholder="Add any special requests or modifications..."
             className="w-full px-3 py-2 border border-border rounded bg-card text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm resize-none"
             rows={3}

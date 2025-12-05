@@ -6,7 +6,7 @@ type AirtableRecord = {
 type GuestData = {
   recordId: string
   selectedEntree: string
-  modifications: Record<string, string>
+  modifications: string
   dietaryRestrictions: string
 }
 
@@ -16,11 +16,11 @@ const AIRTABLE_TABLE_ID = process.env.NEXT_PUBLIC_AIRTABLE_TABLE_ID
 const AIRTABLE_API_KEY = process.env.NEXT_PUBLIC_AIRTABLE_API_KEY
 
 const FIELD_NAMES = {
-  guestName: process.env.NEXT_PUBLIC_AIRTABLE_NAME_FIELD ?? "Guest Name",
+  guestName: process.env.NEXT_PUBLIC_AIRTABLE_NAME_FIELD ?? "Name",
   selectedEntree:
-    process.env.NEXT_PUBLIC_AIRTABLE_ENTREE_FIELD ?? "Selected Entree",
+    process.env.NEXT_PUBLIC_AIRTABLE_ENTREE_FIELD ?? "Entree Choice",
   modifications:
-    process.env.NEXT_PUBLIC_AIRTABLE_MODS_FIELD ?? "Modifications JSON",
+    process.env.NEXT_PUBLIC_AIRTABLE_MODS_FIELD ?? "Entree Modifications",
   dietaryRestrictions:
     process.env.NEXT_PUBLIC_AIRTABLE_DIETARY_FIELD ?? "Dietary Restrictions",
 }
@@ -43,18 +43,6 @@ function buildHeaders() {
 
 function escapeFormulaValue(value: string) {
   return value.replace(/'/g, "\\'")
-}
-
-function safeJsonParse<T>(value: unknown, fallback: T): T {
-  if (typeof value !== "string" || !value.trim()) return fallback
-  try {
-    const parsed = JSON.parse(value)
-    return typeof parsed === "object" && parsed !== null
-      ? (parsed as T)
-      : fallback
-  } catch {
-    return fallback
-  }
 }
 
 async function findGuestRecordByName(
@@ -100,10 +88,8 @@ export async function fetchGuestData(name: string) {
       recordId: record.id,
       selectedEntree:
         (fields[FIELD_NAMES.selectedEntree] as string | undefined) ?? "",
-      modifications: safeJsonParse<Record<string, string>>(
-        fields[FIELD_NAMES.modifications],
-        {},
-      ),
+      modifications:
+        (fields[FIELD_NAMES.modifications] as string | undefined) ?? "",
       dietaryRestrictions:
         (fields[FIELD_NAMES.dietaryRestrictions] as string | undefined) ?? "",
     }
@@ -139,23 +125,12 @@ export async function submitMenuData(formData: {
     const headers = buildHeaders()
 
     const existingRecord = await findGuestRecordByName(guestName)
-    const existingMods = existingRecord
-      ? safeJsonParse<Record<string, string>>(
-          existingRecord.fields[FIELD_NAMES.modifications],
-          {},
-        )
-      : {}
-
-    const updatedMods: Record<string, string> = {
-      ...existingMods,
-      [formData.selectedEntree]: formData.modifications ?? "",
-    }
 
     const payload = {
       fields: {
         [FIELD_NAMES.guestName]: guestName,
         [FIELD_NAMES.selectedEntree]: formData.selectedEntree,
-        [FIELD_NAMES.modifications]: JSON.stringify(updatedMods),
+        [FIELD_NAMES.modifications]: formData.modifications ?? "",
         [FIELD_NAMES.dietaryRestrictions]: formData.dietaryRestrictions ?? "",
       },
     }

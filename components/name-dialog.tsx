@@ -11,20 +11,33 @@ interface NameDialogProps {
   onDataFetched: (data: any) => void
 }
 
-export function NameDialog({ isOpen, onNameSubmit, onDataFetched }: NameDialogProps) {
+export function NameDialog({
+  isOpen,
+  onNameSubmit,
+  onDataFetched,
+}: NameDialogProps) {
   const [name, setName] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!name.trim()) return
+    const trimmedName = name.trim()
+    if (!trimmedName) return
 
     setIsLoading(true)
-    const result = await fetchGuestData(name)
+    const result = await fetchGuestData(trimmedName)
     setIsLoading(false)
 
     // Save the name in state
-    onNameSubmit(name)
+    onNameSubmit(trimmedName)
+
+    if (typeof window !== "undefined") {
+      try {
+        window.localStorage.setItem("guestName", trimmedName)
+      } catch (storageError) {
+        console.warn("Failed to store guest name", storageError)
+      }
+    }
 
     // Pass the fetched data (or empty object if no data)
     if (result.success && result.data) {
@@ -39,8 +52,12 @@ export function NameDialog({ isOpen, onNameSubmit, onDataFetched }: NameDialogPr
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
       <div className="bg-background rounded-lg shadow-xl p-8 w-full max-w-md mx-4">
-        <h2 className="font-serif text-3xl mb-6 text-center text-foreground">I&apos;m excited to see you at the sandwich party!</h2>
-        <p className="text-center text-muted-foreground mb-6">Enter your name so I know who you are</p>
+        <h2 className="font-serif text-3xl mb-6 text-center text-foreground">
+          I&apos;m excited to see you at the sandwich party!
+        </h2>
+        <p className="text-center text-muted-foreground mb-6">
+          Enter your name so I know who you are
+        </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"

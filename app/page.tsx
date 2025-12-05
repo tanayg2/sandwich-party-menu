@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { BackgroundIcons } from "@/components/background-icons"
 import { NameDialog } from "@/components/name-dialog"
 import { MenuSection } from "@/components/menu-section"
@@ -8,12 +8,13 @@ import { AppetizerItem } from "@/components/appetizer-item"
 import { EntreeItem } from "@/components/entree-item"
 import { DessertItem } from "@/components/dessert-item"
 import { FormSection } from "@/components/form-section"
+import { fetchGuestData } from "@/lib/airtable"
 
 export default function Home() {
-  const [isDialogOpen, setIsDialogOpen] = useState(true)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [guestName, setGuestName] = useState("")
   const [selectedEntree, setSelectedEntree] = useState("")
-  const [modifications, setModifications] = useState<Record<string, string>>({})
+  const [modifications, setModifications] = useState("")
   const [dietaryRestrictions, setDietaryRestrictions] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -22,28 +23,73 @@ export default function Home() {
     setIsDialogOpen(false)
   }
 
-  const handleDataFetched = (data: any) => {
+  const handleDataFetched = useCallback((data: any) => {
     // Prefill fields if data was successfully fetched
     if (data.selectedEntree) {
       setSelectedEntree(data.selectedEntree)
     }
-    if (data.modifications) {
+    if (typeof data.modifications === "string") {
       setModifications(data.modifications)
     }
     if (data.dietaryRestrictions) {
       setDietaryRestrictions(data.dietaryRestrictions)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      setIsDialogOpen(true)
+      return
+    }
+
+    let storedName: string | null = null
+    try {
+      storedName = window.localStorage.getItem("guestName")
+    } catch (storageError) {
+      console.warn("Failed to read stored guest name", storageError)
+    }
+
+    const normalizedName = storedName?.trim()
+
+    if (!normalizedName) {
+      setIsDialogOpen(true)
+      return
+    }
+
+    setGuestName(normalizedName)
+    setIsDialogOpen(false)
+
+    let isCancelled = false
+
+    const hydrateSavedGuest = async () => {
+      const result = await fetchGuestData(normalizedName)
+      if (isCancelled) return
+
+      if (result.success && result.data) {
+        handleDataFetched(result.data)
+      } else {
+        try {
+          window.localStorage.removeItem("guestName")
+        } catch (storageError) {
+          console.warn("Failed to clear stored guest name", storageError)
+        }
+        setIsDialogOpen(true)
+      }
+    }
+
+    hydrateSavedGuest()
+
+    return () => {
+      isCancelled = true
+    }
+  }, [handleDataFetched])
 
   const handleEntreeSelect = (id: string) => {
     setSelectedEntree(id)
   }
 
-  const handleModificationsChange = (id: string, value: string) => {
-    setModifications((prev) => ({
-      ...prev,
-      [id]: value,
-    }))
+  const handleModificationsChange = (value: string) => {
+    setModifications(value)
   }
 
   const entrees = [
@@ -98,7 +144,7 @@ export default function Home() {
               description={entree.description}
               isSelected={selectedEntree === entree.id}
               onSelect={handleEntreeSelect}
-              modifications={modifications[entree.id] || ""}
+              modifications={modifications}
               onModificationsChange={handleModificationsChange}
             />
           ))}
