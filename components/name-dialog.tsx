@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { fetchGuestData } from "@/lib/airtable"
+import { fetchGuestData } from "@/app/actions"
 
 interface NameDialogProps {
   isOpen: boolean
@@ -21,7 +21,7 @@ export function NameDialog({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const trimmedName = name.trim()
+    const trimmedName = name.trim().toLowerCase()
     if (!trimmedName) return
 
     setIsLoading(true)
@@ -62,7 +62,7 @@ export function NameDialog({
           <input
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value.toLowerCase())}
             placeholder="Enter your name"
             className="w-full px-4 py-3 border border-border rounded-lg bg-card text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
             disabled={isLoading}

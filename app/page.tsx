@@ -8,7 +8,7 @@ import { AppetizerItem } from "@/components/appetizer-item"
 import { EntreeItem } from "@/components/entree-item"
 import { DessertItem } from "@/components/dessert-item"
 import { FormSection } from "@/components/form-section"
-import { fetchGuestData } from "@/lib/airtable"
+import { fetchGuestData } from "@/app/actions"
 
 export default function Home() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -19,7 +19,7 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleNameSubmit = (name: string) => {
-    setGuestName(name)
+    setGuestName(name.toLowerCase())
     setIsDialogOpen(false)
   }
 
@@ -49,7 +49,7 @@ export default function Home() {
       console.warn("Failed to read stored guest name", storageError)
     }
 
-    const normalizedName = storedName?.trim()
+    const normalizedName = storedName?.trim().toLowerCase()
 
     if (!normalizedName) {
       setIsDialogOpen(true)

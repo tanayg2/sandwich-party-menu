@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { submitMenuData } from "@/lib/airtable"
+import { submitMenuData } from "@/app/actions"
 import { ConfirmationModal } from "@/components/confirmation-modal"
 
 interface FormSectionProps {
@@ -65,7 +65,9 @@ export function FormSection({
             disabled={!selectedEntree || isSubmitting || isSubmittingLocal}
             className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
           >
-            {isSubmitting || isSubmittingLocal ? "Submitting..." : "Submit Menu"}
+            {isSubmitting || isSubmittingLocal
+              ? "Submitting..."
+              : "Submit Menu"}
           </button>
         </div>
       </section>

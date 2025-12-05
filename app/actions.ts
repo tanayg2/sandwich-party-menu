@@ -1,9 +1,11 @@
+"use server"
+
 type AirtableRecord = {
   id: string
   fields: Record<string, unknown>
 }
 
-type GuestData = {
+export type GuestData = {
   recordId: string
   selectedEntree: string
   modifications: string
@@ -11,24 +13,22 @@ type GuestData = {
 }
 
 const API_ROOT = "https://api.airtable.com/v0"
-const AIRTABLE_BASE_ID = process.env.NEXT_PUBLIC_AIRTABLE_BASE_ID
-const AIRTABLE_TABLE_ID = process.env.NEXT_PUBLIC_AIRTABLE_TABLE_ID
-const AIRTABLE_API_KEY = process.env.NEXT_PUBLIC_AIRTABLE_API_KEY
+const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID
+const AIRTABLE_TABLE_ID = process.env.AIRTABLE_TABLE_ID
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY
 
 const FIELD_NAMES = {
-  guestName: process.env.NEXT_PUBLIC_AIRTABLE_NAME_FIELD ?? "Name",
-  selectedEntree:
-    process.env.NEXT_PUBLIC_AIRTABLE_ENTREE_FIELD ?? "Entree Choice",
-  modifications:
-    process.env.NEXT_PUBLIC_AIRTABLE_MODS_FIELD ?? "Entree Modifications",
+  guestName: process.env.AIRTABLE_NAME_FIELD ?? "Name",
+  selectedEntree: process.env.AIRTABLE_ENTREE_FIELD ?? "Entree Choice",
+  modifications: process.env.AIRTABLE_MODS_FIELD ?? "Entree Modifications",
   dietaryRestrictions:
-    process.env.NEXT_PUBLIC_AIRTABLE_DIETARY_FIELD ?? "Dietary Restrictions",
+    process.env.AIRTABLE_DIETARY_FIELD ?? "Dietary Restrictions",
 }
 
 function ensureEnv(variable: string | undefined, label: string) {
   if (!variable) {
     throw new Error(
-      `${label} is not configured. Please set the corresponding NEXT_PUBLIC environment variable.`,
+      `${label} is not configured. Please set the corresponding environment variable.`,
     )
   }
   return variable
@@ -104,7 +104,6 @@ export async function fetchGuestData(name: string) {
   }
 }
 
-// Submit the completed menu selections to Airtable
 export async function submitMenuData(formData: {
   guestName: string
   selectedEntree: string
