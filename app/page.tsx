@@ -19,7 +19,7 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleNameSubmit = (name: string) => {
-    setGuestName(name.toLowerCase())
+    setGuestName(name)
     setIsDialogOpen(false)
   }
 
@@ -49,7 +49,7 @@ export default function Home() {
       console.warn("Failed to read stored guest name", storageError)
     }
 
-    const normalizedName = storedName?.trim().toLowerCase()
+    const normalizedName = storedName?.trim()
 
     if (!normalizedName) {
       setIsDialogOpen(true)
